@@ -1,4 +1,22 @@
-__pycache__/
+# Datasets (auto-downloaded by train.py, huge, never commit)
 data/
+
+# Trained model weights (large binary files, regenerate via training)
 weights/
+*.pth
+*.pt
+
+# Python / uv environment
+.venv/
+__pycache__/
 *.pyc
+
+# Colab / Jupyter
+.ipynb_checkpoints/
+
+# Raw training logs (these get parsed into docs/*.md and don't need to live twice)
+training_log.txt
+
+# OS junk
+.DS_Store
+Thumbs.db
