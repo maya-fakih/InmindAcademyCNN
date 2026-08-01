@@ -15,10 +15,44 @@ from model import SimpleNet
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
 
-# Standard input normalization for CIFAR-10
-transform = transforms.Compose([
-    transforms.ToTensor(), # Convert PIL image to PyTorch Tensor and normalize to [0, 1]
-    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)) # Mean and Standard Deviation of the CIFAR-10 dataset
+# input transformations allow the model to randomly view a slightly warped version of the iniial data
+# it is not creating new images it is just applying a math filter before feeding it in
+# this way it might be cropped, sharpened, flipped etc
+# since the model is not viewing the same repeated pixels it will be forced to generalize rules
+# which is a cure for overfitting (memorizing pixcels instead of learning rules)
+transform_train = transforms.Compose([
+    transforms.RandomCrop(32, padding=4),
+    # random crop after padding — teaches translation invariance (position shifts)
+
+    transforms.RandomHorizontalFlip(),
+    # CIFAR-10 classes are left-right symmetric — free variety, safe for this dataset
+    # (would NOT be safe for e.g. digit/text datasets where flipping changes meaning)
+
+    transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.05),
+    # randomly shifts brightness/contrast/saturation/hue within a small range —
+    # teaches the model not to rely on exact lighting/color, which varies a lot
+    # in real photos. Kept mild (small ranges) since aggressive color shifts
+    # can distort object identity for color-dependent classes (e.g. certain birds/fruit)
+
+    transforms.RandomRotation(10),
+    # small rotation (±10°) — real-world photos are rarely perfectly level;
+    # kept small since CIFAR-10 images are tiny (32x32) and large rotations
+    # destroy too much spatial information at that resolution
+
+    transforms.ToTensor(),
+
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+
+    transforms.RandomErasing(p=0.25, scale=(0.02, 0.1)),
+    # (Cutout-style) randomly blacks out a small rectangular patch after normalization —
+    # forces the model to use multiple cues rather than over-relying on one salient
+    # region (e.g. always keying off the same corner of the image). Kept to a small
+    # scale + 25% probability so it's a mild regularizer, not overwhelming.
+])
+
+transform_test = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
 
 def get_loaders():
