@@ -120,10 +120,12 @@ def evaluate(model, dataloader, criterion, device):
     accuracy = 100 * correct / total
     return avg_loss, accuracy
 
-
+# updated here as well!
 def train(model, dataloader_train, dataloader_val, criterion, optimizer, device):
     model.train()
     epochs = config['hyperparameters']['epochs']
+    best_val_acc = 0.0  # track the best validation accuracy seen so far
+
     for epoch in range(epochs):
         running_loss = 0.0
         with tqdm(
@@ -145,8 +147,17 @@ def train(model, dataloader_train, dataloader_val, criterion, optimizer, device)
         avg_train_loss = running_loss / len(dataloader_train)
         val_loss, val_acc = evaluate(model, dataloader_val, criterion, device)
         print(f"Epoch {epoch+1} finished. Train loss: {avg_train_loss:.3f} | Val loss: {val_loss:.3f} | Val acc: {val_acc:.2f}%")
-    print('Finished Training')
 
+        # save a checkpoint only when this epoch beats every previous one
+        if val_acc > best_val_acc:
+            best_val_acc = val_acc
+            os.makedirs(os.path.dirname(config['paths']['model_path']), exist_ok=True)
+            torch.save(model.state_dict(), config['paths']['model_path'])
+            print(f"  New best (val acc {val_acc:.2f}%) — checkpoint saved")
+
+        model.train()  # evaluate() sets eval mode, switch back before next epoch
+
+    print(f'Finished Training. Best val acc: {best_val_acc:.2f}%')
 
 # Function to test the neural network and print accuracy
 def test(model, dataloader_test, device):
