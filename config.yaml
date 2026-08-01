@@ -1,11 +1,34 @@
 hyperparameters:
-  epochs: 10
-  batch_size: 8
+  epochs: 100
+  # realtively small dataset and is expected to platao at around 70
+  # making 300 epochs (used earlier to train yolo gaining 93% accuracy is over over kill)
+
+  batch_size: 128
+  # collab has large ram we can have big batch size
 
   lr: 0.001
-  momentum: 0.9 
+  # most important hyper param is learning rate
+  # it controls how much we are adjusting the weights of our network with respect to the loss gradient
+  # agressive learning rate can cause the loss to diverge
+  # very small learning rate makes training super slow
 
-  num_workers: 8
+  momentum: 0.9
+  # tracks prev gradients, so we are less likely to get stuck on local minima
+  # persisting gradient and only 10% velocity for the current gradient,
+  # we are able to smooth out the noise in the gradient descent
+  # and have a better chance at finding a global minima
+
+  weight_decay: 0.0005
+  # weight decay is a regularization technique that helps prevent overfitting
+  # it does this by adding a penalty to the loss function based on the magnitude of the model's weights
+  # simply it means that it discorages large weights that perfectly fit training data yet fail to generalize
+
+
+  val_split: 0.1
+  # splits the dataset into training and validation sets
+  # 10% here is reserved for validation and 90 for training
+
+  num_workers: 2 # we only have 2 cpu cores so we need to decrease workers
 
 paths:
   train_dir: '/content/drive/MyDrive/cifar10/train'
