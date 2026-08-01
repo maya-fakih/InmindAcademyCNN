@@ -2,9 +2,9 @@
 data/
 
 # Trained model weights (large binary files, regenerate via training)
-weights/
-*.pth
-*.pt
+# weights/
+# *.pth
+# *.pt
 
 # Python / uv environment
 .venv/
@@ -15,7 +15,7 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Raw training logs (these get parsed into docs/*.md and don't need to live twice)
-training_log.txt
+# training_log.txt
 
 # OS junk
 .DS_Store
