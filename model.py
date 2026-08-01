@@ -1,4 +1,5 @@
 import torch.nn as nn
+import torch
 import torch.nn.functional as F
 from einops import rearrange
 
@@ -55,3 +56,43 @@ class ResidualBlock(nn.Module):
         out = self.conv2(out)
         out = out + self.shortcut(x)
         return self.relu(out)
+
+class ResNet18(nn.Module):
+    def __init__(self, num_classes=10):
+        super().__init__()
+
+        self.stem = conv_block(3, 64)  # 32x32 -> 32x32, no downsampling yet, just learns first filters
+
+        # each stage = 2 ResidualBlocks. first block in a stage handles the
+        # channel/size change (stride=2 shrinks spatial size, except stage 1),
+        # second block just deepens at the new shape (stride=1, same channels)
+        self.stage1 = nn.Sequential(
+            ResidualBlock(64, 64, stride=1),
+            ResidualBlock(64, 64, stride=1)
+        )
+        self.stage2 = nn.Sequential(
+            ResidualBlock(64, 128, stride=2),
+            ResidualBlock(128, 128, stride=1)
+        )
+        self.stage3 = nn.Sequential(
+            ResidualBlock(128, 256, stride=2),
+            ResidualBlock(256, 256, stride=1)
+        )
+        self.stage4 = nn.Sequential(
+            ResidualBlock(256, 512, stride=2),
+            ResidualBlock(512, 512, stride=1)
+        )
+
+        self.pool = nn.AdaptiveAvgPool2d(1)  # collapses whatever spatial size remains down to 1x1
+        self.classifier = nn.Linear(512, num_classes)
+
+    def forward(self, x):
+        x = self.stem(x)
+        x = self.stage1(x)
+        x = self.stage2(x)
+        x = self.stage3(x)
+        x = self.stage4(x)
+        x = self.pool(x)
+        x = torch.flatten(x, 1)
+        x = self.classifier(x)
+        return x
