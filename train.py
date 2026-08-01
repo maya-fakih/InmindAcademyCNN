@@ -21,7 +21,8 @@ with open('config.yaml', 'r') as f:
 # since the model is not viewing the same repeated pixels it will be forced to generalize rules
 # which is a cure for overfitting (memorizing pixcels instead of learning rules)
 transform_train = transforms.Compose([
-    transforms.RandomCrop(32, padding=4),
+    transforms.RandomCrop(32, padding=4),\
+    # we added padding then cropped out the same size so its fine we dont have different size input which is an issue for resnet
     # random crop after padding — teaches translation invariance (position shifts)
 
     transforms.RandomHorizontalFlip(),
