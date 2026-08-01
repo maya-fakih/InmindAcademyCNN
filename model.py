@@ -35,23 +35,13 @@ def conv_block(in_channels, out_channels, kernel_size = 3, stride = 1, padding =
         layers.append(nn.MaxPool2d(kernel_size = 2, stride = 2))
     return nn.Sequential(*layers)
 
-# Simple CNN for CIFAR-10
-class SimpleNet(nn.Module):
-    def __init__(self):
-        super(SimpleNet, self).__init__()
-        self.conv1 = nn.Conv2d(3, 6, 5)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(6, 16, 5)
-        self.fc1 = nn.Linear(16 * 5 * 5, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
+class ResidualBlock(nn.Module):
+    def __init__(self, channels):
+        super().__init__()
+        self.conv1 = conv_block(channels, channels)
+        self.conv2 = conv_block(channels, channels)
 
     def forward(self, x):
-        # Use einops for clarity
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = rearrange(x, 'b c h w -> b (c h w)')  # flatten
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
+        out = self.conv1(x)
+        out = self.conv2(out)
+        return out + x  # the skip connection: add the original input back
