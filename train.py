@@ -11,7 +11,7 @@ import json
 
 import os
 
-from model import ResNet18
+from model import FlexResNet
 
 # Load config (YAML for easy editing)
 with open('config.yaml', 'r') as f:
@@ -236,8 +236,15 @@ def main():
     # Get data loaders for training and testing
     dataloader_train, dataloader_val, dataloader_test = get_loaders()
 
-    # Create the neural network and move it to the selected device
-    model = ResNet18(num_classes=10).to(device)
+    # This specific configuration (width_factor=4, blocks_per_stage=4) builds what's
+    # called a "WideResNet-34-4" in the literature's depth-width naming convention:
+    # 34 total weighted layers (1 stem + 4 stages x 4 blocks x 2 convs + 1 classifier),
+    # 4x wider channels than a standard ResNet at every stage. Similar family to the
+    # WideResNet paper's famous WRN-28-10, just a different depth/width tradeoff point.
+    # width_factor=4: quadruple channels at every stage (64->256 base instead of 64)
+    # blocks_per_stage=4: 4 residual blocks per stage instead of 2, so deeper too
+    # dropout=0.3: regularizes since we're deliberately adding a lot of capacity
+    model = FlexResNet(num_classes=10, width_factor=4, blocks_per_stage=4, dropout=0.3).to(device)
 
     # Define the loss function (cross-entropy for classification)
     # cross entropy is a measure of how well the predicted probability distro matches the true distro
@@ -284,9 +291,9 @@ def main():
     else:
         print("No checkpoint to resume from, starting fresh")
 
+    # passing the scheduler to the train function
     best_val_acc, history = train(model, dataloader_train, dataloader_val, criterion, optimizer, device,
-                                   start_epoch=start_epoch, best_val_acc=best_val_acc, history=history)
-
+                                start_epoch=start_epoch, best_val_acc=best_val_acc, history=history, scheduler=scheduler)
     # --- Load best weights before final test evaluation, not whatever's left in memory ---
     best_checkpoint = torch.load('weights/best.pth', map_location=device)
     model.load_state_dict(best_checkpoint['model_state_dict'])
