@@ -136,16 +136,21 @@ def save_checkpoint(model, optimizer, epoch, best_val_acc, path, history=None):
 
 # IMPORTANT FIX
 # tracking the best validation accuracy and saving a checkpoint to not loose a better model among many epochs
-def train(model, dataloader_train, dataloader_val, criterion, optimizer, device):
-    model.train()
-    epochs = config['hyperparameters']['epochs']
-    best_val_acc = 0.0  # track the best validation accuracy seen so far
+def train(model, dataloader_train, dataloader_val, criterion, optimizer, device,
+          start_epoch=0, best_val_acc=0.0, history=None):
+    # tracks to save history for save checkpoint :D
+    total_epochs = config['hyperparameters']['epochs']
+    latest_path = 'weights/latest.pth'
+    best_path = 'weights/best.pth'
+    if history is None:
+        history = {'epoch': [], 'train_loss': [], 'val_loss': [], 'val_acc': []}
 
-    for epoch in range(epochs):
+    for epoch in range(start_epoch, total_epochs):
+        model.train()
         running_loss = 0.0
         with tqdm(
             dataloader_train,
-            desc=f"Epoch {epoch+1}/{epochs}",
+            desc=f"Epoch {epoch+1}/{total_epochs}",
             leave=True,
             unit="batch"
         ) as progress_bar:
@@ -159,20 +164,25 @@ def train(model, dataloader_train, dataloader_val, criterion, optimizer, device)
                 running_loss += loss.item()
                 avg_loss = running_loss / (i + 1)
                 progress_bar.set_postfix({'loss': avg_loss})
+
         avg_train_loss = running_loss / len(dataloader_train)
         val_loss, val_acc = evaluate(model, dataloader_val, criterion, device)
-        print(f"Epoch {epoch+1} finished. Train loss: {avg_train_loss:.3f} | Val loss: {val_loss:.3f} | Val acc: {val_acc:.2f}%")
+        print(f"Epoch {epoch+1}/{total_epochs} finished. Train loss: {avg_train_loss:.3f} | Val loss: {val_loss:.3f} | Val acc: {val_acc:.2f}%")
 
-        # save a checkpoint only when this epoch beats every previous one
+        history['epoch'].append(epoch + 1)
+        history['train_loss'].append(avg_train_loss)
+        history['val_loss'].append(val_loss)
+        history['val_acc'].append(val_acc)
+
+        save_checkpoint(model, optimizer, epoch, best_val_acc, latest_path, history)
+
         if val_acc > best_val_acc:
             best_val_acc = val_acc
-            os.makedirs(os.path.dirname(config['paths']['model_path']), exist_ok=True)
-            torch.save(model.state_dict(), config['paths']['model_path'])
-            print(f"  New best (val acc {val_acc:.2f}%) — checkpoint saved")
-
-        model.train()  # evaluate() sets eval mode, switch back before next epoch
+            save_checkpoint(model, optimizer, epoch, best_val_acc, best_path, history)
+            print(f"  New best (val acc {val_acc:.2f}%) — best.pth updated")
 
     print(f'Finished Training. Best val acc: {best_val_acc:.2f}%')
+    return best_val_acc, history
 
 # Function to test the neural network and print accuracy
 def test(model, dataloader_test, device):
