@@ -221,14 +221,36 @@ def main():
         momentum=config['hyperparameters']['momentum']
     )
 
-    train(model, dataloader_train, dataloader_val, criterion, optimizer, device)
+    # --- Resume logic: if a checkpoint exists at the configured resume path, load it ---
+    start_epoch = 0
+    best_val_acc = 0.0
+    history = None
+    resume_path = config['paths'].get('resume_from')
+
+    if resume_path and os.path.exists(resume_path):
+        print(f"Found checkpoint at {resume_path}, resuming...")
+        checkpoint = torch.load(resume_path, map_location=device)
+        model.load_state_dict(checkpoint['model_state_dict'])
+        if checkpoint.get('optimizer_state_dict') is not None:
+            optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        else:
+            print("No optimizer state in checkpoint (converted from an old run) — optimizer starts fresh")
+        start_epoch = checkpoint['epoch'] + 1
+        best_val_acc = checkpoint['best_val_acc']
+        history = checkpoint.get('history')
+        print(f"Resumed from epoch {start_epoch}, best val acc so far: {best_val_acc:.2f}%")
+    else:
+        print("No checkpoint to resume from, starting fresh")
+
+    best_val_acc, history = train(model, dataloader_train, dataloader_val, criterion, optimizer, device,
+                                   start_epoch=start_epoch, best_val_acc=best_val_acc, history=history)
+
+    # --- Load best weights before final test evaluation, not whatever's left in memory ---
+    best_checkpoint = torch.load('weights/best.pth', map_location=device)
+    model.load_state_dict(best_checkpoint['model_state_dict'])
+
     test_loss, test_acc = evaluate(model, dataloader_test, criterion, device)
     print(f'Test loss: {test_loss:.3f} | Test acc: {test_acc:.2f}%')
-
-    # Save the trained model's parameters to a file
-    os.makedirs(os.path.dirname(config['paths']['model_path']), exist_ok=True)  # Create weights dir if missing
-    torch.save(model.state_dict(), config['paths']['model_path']) # Save the model's parameters to a pth file
-    print(f"Model saved to {config['paths']['model_path']}")
-
+    
 if __name__ == '__main__':
     main()
