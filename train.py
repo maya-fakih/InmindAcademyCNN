@@ -121,6 +121,19 @@ def evaluate(model, dataloader, criterion, device):
     accuracy = 100 * correct / total
     return avg_loss, accuracy
 
+def save_checkpoint(model, optimizer, epoch, best_val_acc, path, history=None):
+    """Saves everything needed to resume training exactly where it left off:
+    model weights, optimizer state (momentum buffers), current epoch number,
+    best val accuracy seen so far, and per-epoch history for later plotting."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    torch.save({
+        'epoch': epoch,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'best_val_acc': best_val_acc,
+        'history': history,
+    }, path)
+
 # IMPORTANT FIX
 # tracking the best validation accuracy and saving a checkpoint to not loose a better model among many epochs
 def train(model, dataloader_train, dataloader_val, criterion, optimizer, device):
