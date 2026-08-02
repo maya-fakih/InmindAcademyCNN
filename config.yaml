@@ -31,7 +31,7 @@ hyperparameters:
   num_workers: 2 # we only have 2 cpu cores so we need to decrease workers
 
 paths:
-  train_dir: '/content/drive/MyDrive/cifar10/train'
-  test_dir: '/content/drive/MyDrive/cifar10/test'
+  train_dir: 'data/cifar10/train'
+  test_dir: 'data/cifar10/test'
   model_path: 'weights/checkpoint.pth'
   resume_from: 'weights/03-resnet-blocks-best.pth'
