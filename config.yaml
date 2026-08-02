@@ -34,4 +34,4 @@ paths:
   train_dir: '/content/drive/MyDrive/cifar10/train'
   test_dir: '/content/drive/MyDrive/cifar10/test'
   model_path: 'weights/checkpoint.pth'
-  resume_from: null
+  resume_from: 'weights/03-resnet-blocks-best.pth'
