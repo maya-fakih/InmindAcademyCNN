@@ -7,6 +7,8 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, random_split
 from torchvision import datasets, transforms
 
+import json
+
 import os
 
 from model import ResNet18
@@ -102,25 +104,6 @@ def get_loaders():
     )
     return dataloader_train, dataloader_val, dataloader_test
 
-
-def evaluate(model, dataloader, criterion, device):
-    model.eval()
-    total_loss = 0.0
-    correct = 0
-    total = 0
-    with torch.no_grad():
-        for images, labels in dataloader:
-            images, labels = images.to(device), labels.to(device)
-            outputs = model(images)
-            loss = criterion(outputs, labels)
-            total_loss += loss.item() * labels.size(0)
-            _, predicted = torch.max(outputs, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-    avg_loss = total_loss / total
-    accuracy = 100 * correct / total
-    return avg_loss, accuracy
-
 def save_checkpoint(model, optimizer, epoch, best_val_acc, path, history=None):
     """Saves everything needed to resume training exactly where it left off:
     model weights, optimizer state (momentum buffers), current epoch number,
@@ -184,21 +167,60 @@ def train(model, dataloader_train, dataloader_val, criterion, optimizer, device,
     print(f'Finished Training. Best val acc: {best_val_acc:.2f}%')
     return best_val_acc, history
 
-# Function to test the neural network and print accuracy
-def test(model, dataloader_test, device):
-    model.eval()  # Set the model to evaluation mode
-    correct = 0  # Count of correct predictions
-    total = 0  # Total number of samples
-    with torch.no_grad():  # No need to compute gradients during testing (save memory)
-        for images, labels in dataloader_test:
-            images, labels = images.to(device), labels.to(device)
-            outputs = model(images)  # Get model predictions
-            _, predicted = torch.max(outputs, 1)  # Get predicted class
-            total += labels.size(0)  # Update total count
-            correct += (predicted == labels).sum().item()  # Update correct count
-    # Print accuracy as a percentage
-    print(f'Accuracy of the network on the 10000 test images: {100 * correct / total:.2f} %')
+def evaluate(model, dataloader, criterion, device, collect_predictions=False):
+    """Runs one pass over dataloader, returns avg loss + accuracy.
+    If collect_predictions=True, also returns the raw predictions/labels
+    lists, so a second pass isn't needed just to build a confusion matrix."""
+    model.eval()
+    total_loss = 0.0
+    correct = 0
+    total = 0
+    all_preds, all_labels = [], []
 
+    with torch.no_grad():
+        for images, labels in dataloader:
+            images, labels = images.to(device), labels.to(device)
+            outputs = model(images)
+            loss = criterion(outputs, labels)
+            total_loss += loss.item() * labels.size(0)
+            _, predicted = torch.max(outputs, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+            if collect_predictions:
+                all_preds.extend(predicted.cpu().tolist())
+                all_labels.extend(labels.cpu().tolist())
+
+    avg_loss = total_loss / total
+    accuracy = 100 * correct / total
+
+    if collect_predictions:
+        return avg_loss, accuracy, all_preds, all_labels
+    return avg_loss, accuracy
+
+def compute_classification_metrics(all_preds, all_labels, class_names):
+    """Takes predictions already collected by evaluate(), returns per-class
+    precision/recall/F1 (dict) and confusion matrix (2D list)."""
+    from sklearn.metrics import classification_report, confusion_matrix
+    report = classification_report(all_labels, all_preds, target_names=class_names, output_dict=True)
+    cm = confusion_matrix(all_labels, all_preds)
+    return report, cm.tolist()
+
+def save_metrics_json(test_loss, test_acc, best_val_acc, history, report, cm, class_names, path='logs/metrics.json'):
+    """Writes one JSON file containing everything scripts/generate_report.py
+    needs to build plots and a markdown summary — keeps training and
+    reporting as two separate, independent steps."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w') as f:
+        json.dump({
+            'test_loss': test_loss,
+            'test_acc': test_acc,
+            'best_val_acc': best_val_acc,
+            'history': history,
+            'classification_report': report,
+            'confusion_matrix': cm,
+            'class_names': class_names,
+        }, f, indent=2)
+    print(f"Saved metrics to {path}")
 
 def main():
     # Select device: use GPU if available, otherwise use CPU
@@ -249,8 +271,12 @@ def main():
     best_checkpoint = torch.load('weights/best.pth', map_location=device)
     model.load_state_dict(best_checkpoint['model_state_dict'])
 
-    test_loss, test_acc = evaluate(model, dataloader_test, criterion, device)
+    test_loss, test_acc, test_preds, test_labels = evaluate(model, dataloader_test, criterion, device, collect_predictions=True)
     print(f'Test loss: {test_loss:.3f} | Test acc: {test_acc:.2f}%')
-    
+
+    class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+    report, cm = compute_classification_metrics(test_preds, test_labels, class_names)
+    save_metrics_json(test_loss, test_acc, best_val_acc, history, report, cm, class_names)
+
 if __name__ == '__main__':
     main()
