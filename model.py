@@ -74,41 +74,43 @@ class ResidualBlock(nn.Module):
         out = out + self.shortcut(x)
         return self.relu(out)
 
-class ResNet18(nn.Module):
-    def __init__(self, num_classes=10):
+class FlexResNet(nn.Module):
+    # the name comes from the fact that everything about this res net is flexible
+    # from width to depth to the number of blocks per stage to the number of classes
+    # this is a generic resnet that can be used for any dataset and any nb of classes
+    def __init__(self, num_classes=10, width_factor=1, blocks_per_stage=2, dropout=0.0):
         super().__init__()
 
-        self.stem = conv_block(3, 64)  # 32x32 -> 32x32, no downsampling yet, just learns first filters
+        # What this does: instead of always outputting 64 channels,
+        # the stem now outputs 64 * width_factor channels.
+        # If width_factor=1 (default), base=64 — identical to before.
+        # If width_factor=2, base=128 — double the channels, same spatial size,
+        # same image resolution, just more feature detectors per layer.
+        base = 64 * width_factor
+        self.stem = conv_block(3, base)
 
         # each stage = 2 ResidualBlocks. first block in a stage handles the
         # channel/size change (stride=2 shrinks spatial size, except stage 1),
         # second block just deepens at the new shape (stride=1, same channels)
-        self.stage1 = nn.Sequential(
-            ResidualBlock(64, 64, stride=1),
-            ResidualBlock(64, 64, stride=1)
-        )
-        self.stage2 = nn.Sequential(
-            ResidualBlock(64, 128, stride=2),
-            ResidualBlock(128, 128, stride=1)
-        )
-        self.stage3 = nn.Sequential(
-            ResidualBlock(128, 256, stride=2),
-            ResidualBlock(256, 256, stride=1)
-        )
-        self.stage4 = nn.Sequential(
-            ResidualBlock(256, 512, stride=2),
-            ResidualBlock(512, 512, stride=1)
-        )
+        self.stages = nn.ModuleList()
+        for i in range(4):
+            stride = 1 if i == 0 else 2
+            out_base = base if i == 0 else base * 2
 
+            stage_blocks = [ResidualBlock(base, out_base, stride=stride, dropout=dropout)]
+            for _ in range(blocks_per_stage - 1):
+                stage_blocks.append(ResidualBlock(out_base, out_base, stride=1, dropout=dropout))
+            self.stages.append(nn.Sequential(*stage_blocks))
+
+            base = out_base
+
+        self.classifier = nn.Linear(base, num_classes)
         self.pool = nn.AdaptiveAvgPool2d(1)  # collapses whatever spatial size remains down to 1x1
-        self.classifier = nn.Linear(512, num_classes)
 
     def forward(self, x):
         x = self.stem(x)
-        x = self.stage1(x)
-        x = self.stage2(x)
-        x = self.stage3(x)
-        x = self.stage4(x)
+        for stage in self.stages:
+            x = stage(x)
         x = self.pool(x)
         x = torch.flatten(x, 1)
         x = self.classifier(x)
