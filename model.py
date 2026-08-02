@@ -41,10 +41,21 @@ def conv_block(in_channels, out_channels, kernel_size = 3, stride = 1, padding =
     return nn.Sequential(*layers)
 
 class ResidualBlock(nn.Module):
-    def __init__(self, in_channels, out_channels, stride=1):
+    # dropout blocks out randomly selected neurons so that neurons are less likely to be codependant
+    # instead they will be forced to geenralize and have meaningful stand on their own
+    # this significantly reduces overfitting and improves generalization
+    def __init__(self, in_channels, out_channels, stride=1, dropout=0.0):
         super().__init__()
-        self.conv1 = conv_block(in_channels, out_channels, stride=stride)              # Conv+BN+ReLU
-        self.conv2 = conv_block(out_channels, out_channels, stride=1, activate=False)  # Conv+BN only — ReLU held back until after the skip-add
+        self.conv1 = conv_block(in_channels, out_channels, stride=stride)
+        # dropout2d blocks entire channels/feature_maps instead of individual pixels as pixels alone are not meaningful after convolutioin their effect gets easily lost
+        # the if statement is to avoid creating a dropout layer is the dropout is 0 since it will be useless overhead
+        self.dropout = nn.Dropout2d(dropout) if dropout > 0 else nn.Identity()
+        self.conv2 = conv_block(out_channels, out_channels, stride=1, activate=False)
+        # why did we not use activate = true instead of relu here?
+        # in order to implement skip connection
+        # ie, adding the input back into the output of the block,
+        # we need to keep the output of conv2 linear (no activation) so that the addition is valid.
+        # The ReLU activation is applied after the addition, allowing the network to learn residual mappings effectively.
         self.relu = nn.ReLU(inplace=True)
 
         self.shortcut = nn.Sequential()
@@ -53,6 +64,12 @@ class ResidualBlock(nn.Module):
 
     def forward(self, x):
         out = self.conv1(x)
+        # dropout is applied between the 2 convolutions
+        # the 1st conv extracts features
+        # the 2nd combines them
+        # dropout randomly removes some of the features to force the model to learn more robust features
+        # rather than highly codependant ones
+        out = self.dropout(out)
         out = self.conv2(out)
         out = out + self.shortcut(x)
         return self.relu(out)
