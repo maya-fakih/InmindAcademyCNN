@@ -251,8 +251,8 @@ def main():
     # WideResNet paper's famous WRN-28-10, just a different depth/width tradeoff point.
     # width_factor=4: quadruple channels at every stage (64->256 base instead of 64)
     # blocks_per_stage=4: 4 residual blocks per stage instead of 2, so deeper too
-    # dropout=0.3: regularizes since we're deliberately adding a lot of capacity
-    model = FlexResNet(num_classes=10, width_factor=4, blocks_per_stage=4, dropout=0.3).to(device)
+    # dropout=0.3: regularizes since we're deliberately adding a lot of capacity    
+    model = FlexResNet(num_classes=10, width_factor=1, blocks_per_stage=2, dropout=0.3).to(device)
 
     # Define the loss function (cross-entropy for classification)
     # cross entropy is a measure of how well the predicted probability distro matches the true distro
