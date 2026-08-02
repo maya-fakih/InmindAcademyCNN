@@ -120,7 +120,7 @@ def save_checkpoint(model, optimizer, epoch, best_val_acc, path, history=None):
 # IMPORTANT FIX
 # tracking the best validation accuracy and saving a checkpoint to not loose a better model among many epochs
 def train(model, dataloader_train, dataloader_val, criterion, optimizer, device,
-          start_epoch=0, best_val_acc=0.0, history=None):
+          start_epoch=0, best_val_acc=0.0, history=None, scheduler=None):
     # tracks to save history for save checkpoint :D
     total_epochs = config['hyperparameters']['epochs']
     latest_path = 'weights/latest.pth'
@@ -157,7 +157,13 @@ def train(model, dataloader_train, dataloader_val, criterion, optimizer, device,
         history['val_loss'].append(val_loss)
         history['val_acc'].append(val_acc)
 
+        # step the scheduler once per epoch, not per batch, so lr changes smoothly epoch by epoch
         save_checkpoint(model, optimizer, epoch, best_val_acc, latest_path, history)
+        if scheduler is not None:
+            scheduler.step()
+            # updating learning rate in the progress bar for visibility
+            current_lr = scheduler.get_last_lr()[0]
+            print(f"Learning rate updated to: {current_lr:.6f}")
 
         if val_acc > best_val_acc:
             best_val_acc = val_acc
@@ -234,13 +240,27 @@ def main():
     model = ResNet18(num_classes=10).to(device)
 
     # Define the loss function (cross-entropy for classification)
-    criterion = nn.CrossEntropyLoss()
+    # cross entropy is a measure of how well the predicted probability distro matches the true distro
+    # label smoothing means we dont tell the model to be 100% sure about the correct class
+    # instead of target being like [0,0,1,0] we make it like [0.01,0.01,0.97,0.01]
+    # this stops the model from becoming overconfident and helps it generalize better
+    # overconfident models tend to overfit since they think they are always right
+    criterion = nn.CrossEntropyLoss(label_smoothing=config['hyperparameters'].get('label_smoothing', 0.1))
 
     # Define the optimizer (SGD with learning rate and momentum from config)
     optimizer = optim.SGD(
         model.parameters(),
         lr=config['hyperparameters']['lr'],
         momentum=config['hyperparameters']['momentum']
+    )
+
+    # lr scheduler slowly lowers the learning rate over epochs following a cosine curve
+    # start: big steps so we learn fast in the begining
+    # end: tiny steps so we fine tune carefully and dont overshoot the minima near the end
+    # T_max is the nb of epochs it takes to go from max lr to basically 0
+    scheduler = optim.lr_scheduler.CosineAnnealingLR(
+        optimizer,
+        T_max=config['hyperparameters']['epochs']
     )
 
     # --- Resume logic: if a checkpoint exists at the configured resume path, load it ---
