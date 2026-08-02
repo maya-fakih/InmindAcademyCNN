@@ -1,5 +1,5 @@
 hyperparameters:
-  epochs: 200
+  epochs: 100
   # realtively small dataset and is expected to platao at around 70
   # making 300 epochs (used earlier to train yolo gaining 93% accuracy is over over kill)
 
@@ -34,4 +34,4 @@ paths:
   train_dir: 'data/cifar10/train'
   test_dir: 'data/cifar10/test'
   model_path: 'weights/checkpoint.pth'
-  resume_from: 'weights/03-resnet-blocks-best.pth'
+  resume_from: null

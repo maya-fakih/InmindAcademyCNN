@@ -82,7 +82,15 @@ def get_loaders():
     n_total = len(dataset_train_full)
     n_val = int(n_total * val_split)
     n_train = n_total - n_val
-    dataset_train, dataset_val = random_split(dataset_train_full, [n_train, n_val])
+    # for reproducibility
+    # + cudos to 42 lol :D
+    # seeding the split so every run (any platform, any session) draws the exact
+    # same train/val partition — without this, resuming or comparing across
+    # sessions gives a DIFFERENT random split each time, contaminating val accuracy
+    # (this bit us on branch 04 — val jumped to 96% because Kaggle drew a split
+    # that overlapped with what Colab had already trained on)
+    generator = torch.Generator().manual_seed(42)
+    dataset_train, dataset_val = random_split(dataset_train_full, [n_train, n_val], generator=generator)
 
     dataloader_train = DataLoader(
         dataset_train,
