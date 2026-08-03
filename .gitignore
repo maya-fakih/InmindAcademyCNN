@@ -1,10 +1,10 @@
 # Datasets (auto-downloaded by train.py, huge, never commit)
 data/
 
-# Trained model weights (large binary files, regenerate via training)
-# weights/
-# *.pth
-# *.pt
+Trained model weights (large binary files, regenerate via training)
+weights/
+*.pth
+*.pt
 
 # Python / uv environment
 .venv/
