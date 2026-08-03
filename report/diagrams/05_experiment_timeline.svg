@@ -1,0 +1,113 @@
+<svg viewBox="0 0 1500 620" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1500" height="620" fill="#fbfaf7"/>
+  <text x="750" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2937">Experiment timeline — branches 00 through 07</text>
+  <text x="750" y="58" text-anchor="middle" font-size="13" fill="#6b7280">Each branch changes exactly one or two things from the previous one. Accuracy is on the CIFAR-10 test set (10,000 held-out images).</text>
+
+  <line x1="70" y1="140" x2="1430" y2="140" stroke="#d1d5db" stroke-width="3"/>
+
+  <!-- helper card template repeated manually -->
+  <!-- 00 -->
+  <circle cx="120" cy="140" r="9" fill="#93c5fd" stroke="#1e3a8a" stroke-width="2"/>
+  <rect x="45" y="160" width="150" height="150" rx="10" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="120" y="182" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2937">00 &#183; baseline</text>
+  <text x="120" y="200" text-anchor="middle" font-size="10" fill="#6b7280">SimpleNet</text>
+  <text x="120" y="216" text-anchor="middle" font-size="10" fill="#6b7280">10 epochs</text>
+  <text x="120" y="232" text-anchor="middle" font-size="10" fill="#6b7280">no tuning</text>
+  <text x="120" y="260" text-anchor="middle" font-size="20" font-weight="700" fill="#1e3a8a">63.6%</text>
+  <text x="120" y="278" text-anchor="middle" font-size="10" fill="#9ca3af">test accuracy</text>
+  <text x="120" y="296" text-anchor="middle" font-size="9" fill="#9ca3af">loss 1.048</text>
+
+  <!-- 01 -->
+  <circle cx="290" cy="140" r="9" fill="#93c5fd" stroke="#1e3a8a" stroke-width="2"/>
+  <rect x="215" y="160" width="150" height="150" rx="10" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="290" y="182" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2937">01 &#183; config tuning</text>
+  <text x="290" y="200" text-anchor="middle" font-size="10" fill="#6b7280">SimpleNet</text>
+  <text x="290" y="216" text-anchor="middle" font-size="10" fill="#6b7280">100 epochs</text>
+  <text x="290" y="232" text-anchor="middle" font-size="10" fill="#6b7280">+weight decay, momentum</text>
+  <text x="290" y="260" text-anchor="middle" font-size="20" font-weight="700" fill="#1e3a8a">64.9%</text>
+  <text x="290" y="278" text-anchor="middle" font-size="10" fill="#9ca3af">test accuracy</text>
+  <text x="290" y="296" text-anchor="middle" font-size="9" fill="#9ca3af">plateaued as predicted</text>
+
+  <!-- 02 -->
+  <circle cx="460" cy="140" r="9" fill="#d1d5db" stroke="#6b7280" stroke-width="2"/>
+  <rect x="385" y="160" width="150" height="150" rx="10" fill="#f9fafb" stroke="#d1d5db" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="460" y="182" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2937">02 &#183; augmentation</text>
+  <text x="460" y="200" text-anchor="middle" font-size="10" fill="#6b7280">SimpleNet</text>
+  <text x="460" y="216" text-anchor="middle" font-size="10" fill="#6b7280">+crop, flip, jitter,</text>
+  <text x="460" y="232" text-anchor="middle" font-size="10" fill="#6b7280">rotation, erasing</text>
+  <text x="460" y="266" text-anchor="middle" font-size="14" font-weight="700" fill="#6b7280">no result logged</text>
+  <text x="460" y="284" text-anchor="middle" font-size="10" fill="#9ca3af">superseded before a</text>
+  <text x="460" y="298" text-anchor="middle" font-size="10" fill="#9ca3af">final run was recorded</text>
+
+  <!-- 03 -->
+  <circle cx="630" cy="140" r="9" fill="#86efac" stroke="#14532d" stroke-width="2"/>
+  <rect x="555" y="160" width="150" height="150" rx="10" fill="#ffffff" stroke="#86efac" stroke-width="2"/>
+  <text x="630" y="182" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2937">03 &#183; resnet blocks</text>
+  <text x="630" y="200" text-anchor="middle" font-size="10" fill="#6b7280">ResNet18</text>
+  <text x="630" y="216" text-anchor="middle" font-size="10" fill="#6b7280">100 epochs</text>
+  <text x="630" y="232" text-anchor="middle" font-size="10" fill="#6b7280">plain, no dropout/LR sched</text>
+  <text x="630" y="260" text-anchor="middle" font-size="20" font-weight="700" fill="#14532d">90.5%</text>
+  <text x="630" y="278" text-anchor="middle" font-size="10" fill="#9ca3af">test accuracy</text>
+  <text x="630" y="296" text-anchor="middle" font-size="9" fill="#9ca3af">+27pt jump from SimpleNet</text>
+
+  <!-- 04 -->
+  <circle cx="800" cy="140" r="9" fill="#86efac" stroke="#14532d" stroke-width="2"/>
+  <rect x="725" y="160" width="150" height="150" rx="10" fill="#ffffff" stroke="#86efac" stroke-width="2"/>
+  <text x="800" y="182" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2937">04 &#183; longer run</text>
+  <text x="800" y="200" text-anchor="middle" font-size="10" fill="#6b7280">ResNet18</text>
+  <text x="800" y="216" text-anchor="middle" font-size="10" fill="#6b7280">200 epochs (resumed)</text>
+  <text x="800" y="232" text-anchor="middle" font-size="10" fill="#6b7280">same architecture as 03</text>
+  <text x="800" y="260" text-anchor="middle" font-size="20" font-weight="700" fill="#14532d">90.3%</text>
+  <text x="800" y="278" text-anchor="middle" font-size="10" fill="#9ca3af">test accuracy</text>
+  <text x="800" y="296" text-anchor="middle" font-size="9" fill="#dc2626">no gain &#8212; see note below</text>
+
+  <!-- 05 -->
+  <circle cx="970" cy="140" r="9" fill="#fca5a5" stroke="#7f1d1d" stroke-width="2"/>
+  <rect x="895" y="160" width="150" height="150" rx="10" fill="#fff7f7" stroke="#fca5a5" stroke-width="2"/>
+  <text x="970" y="182" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2937">05 &#183; WideResNet-34-4</text>
+  <text x="970" y="200" text-anchor="middle" font-size="10" fill="#6b7280">FlexResNet w4 d4</text>
+  <text x="970" y="216" text-anchor="middle" font-size="10" fill="#6b7280">dropout, cosine LR,</text>
+  <text x="970" y="232" text-anchor="middle" font-size="10" fill="#6b7280">label smoothing</text>
+  <text x="970" y="260" text-anchor="middle" font-size="15" font-weight="700" fill="#7f1d1d">88.0% val</text>
+  <text x="970" y="278" text-anchor="middle" font-size="10" fill="#9ca3af">(epoch 71, still climbing)</text>
+  <text x="970" y="296" text-anchor="middle" font-size="9" fill="#dc2626">run lost &#8212; no test score</text>
+
+  <!-- 06 -->
+  <circle cx="1140" cy="140" r="9" fill="#fde047" stroke="#713f12" stroke-width="2"/>
+  <rect x="1065" y="160" width="150" height="150" rx="10" fill="#fffdf5" stroke="#fde047" stroke-width="2"/>
+  <text x="1140" y="182" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2937">06 &#183; ResNet18 optimized</text>
+  <text x="1140" y="200" text-anchor="middle" font-size="10" fill="#6b7280">FlexResNet w1 d2</text>
+  <text x="1140" y="216" text-anchor="middle" font-size="10" fill="#6b7280">same tricks as 05, on the</text>
+  <text x="1140" y="232" text-anchor="middle" font-size="10" fill="#6b7280">original 18-layer shape</text>
+  <text x="1140" y="264" text-anchor="middle" font-size="14" font-weight="700" fill="#713f12">in progress</text>
+  <text x="1140" y="282" text-anchor="middle" font-size="10" fill="#9ca3af">epoch 60 / 200 target</text>
+  <text x="1140" y="298" text-anchor="middle" font-size="9" fill="#9ca3af">checkpointed, still running</text>
+
+  <!-- 07 -->
+  <circle cx="1310" cy="140" r="9" fill="#e9d5ff" stroke="#581c87" stroke-width="2"/>
+  <rect x="1235" y="160" width="150" height="150" rx="10" fill="#fdfaff" stroke="#e9d5ff" stroke-width="2"/>
+  <text x="1310" y="182" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2937">07 &#183; pretrained finetune</text>
+  <text x="1310" y="200" text-anchor="middle" font-size="10" fill="#6b7280">ResNet56 (CIFAR)</text>
+  <text x="1310" y="216" text-anchor="middle" font-size="10" fill="#6b7280">loads public 93.39%</text>
+  <text x="1310" y="232" text-anchor="middle" font-size="10" fill="#6b7280">checkpoint, fine-tunes</text>
+  <text x="1310" y="264" text-anchor="middle" font-size="14" font-weight="700" fill="#581c87">not yet run</text>
+  <text x="1310" y="282" text-anchor="middle" font-size="10" fill="#9ca3af">planned: fast path to a</text>
+  <text x="1310" y="298" text-anchor="middle" font-size="9" fill="#9ca3af">strong final number</text>
+
+  <!-- bottom note -->
+  <rect x="45" y="340" width="1340" height="230" fill="#ffffff" stroke="#e5e7eb" stroke-width="1.5" rx="10"/>
+  <text x="65" y="368" font-size="14" font-weight="700" fill="#1f2937">Two things worth knowing before trusting the numbers above</text>
+
+  <text x="65" y="396" font-size="12" font-weight="700" fill="#b91c1c">1. Branch 04's 96.30% "best val accuracy" is not real.</text>
+  <text x="65" y="416" font-size="12" fill="#374151">A checkpoint was resumed from Colab into a fresh Kaggle session, and the two platforms drew a different random</text>
+  <text x="65" y="434" font-size="12" fill="#374151">train/validation split. The model was briefly being "tested" on images it had already trained on, inflating validation</text>
+  <text x="65" y="452" font-size="12" fill="#374151">accuracy. The 90.30% TEST accuracy is unaffected (the test set never changes) and is the trustworthy number for</text>
+  <text x="65" y="470" font-size="12" fill="#374151">branch 04. The fix (a seeded `torch.Generator(42)` split) is now permanent in every later branch.</text>
+
+  <text x="65" y="500" font-size="12" font-weight="700" fill="#b91c1c">2. Branch 05's run was lost, not failed.</text>
+  <text x="65" y="520" font-size="12" fill="#374151">A local power cut, then a Kaggle disconnect, then a Colab disconnect &#8212; all before the epoch-71 checkpoint (88.04%</text>
+  <text x="65" y="538" font-size="12" fill="#374151">val accuracy, still trending up) was ever pushed to GitHub. Only the printed console log survived, which is what this</text>
+  <text x="65" y="556" font-size="12" fill="#374151">report's branch-05 numbers are reconstructed from. This is the direct reason train.py now auto-pushes a checkpoint</text>
+  <text x="65" y="572" font-size="12" font-weight="600" fill="#374151">every 10 epochs, capping any future loss at roughly 9 epochs of progress.</text>
+
+</svg>

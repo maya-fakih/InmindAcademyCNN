@@ -1,0 +1,109 @@
+<svg viewBox="0 0 1300 620" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1300" height="620" fill="#fbfaf7"/>
+  <text x="650" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2937">FlexResNet — two independent dials: width and depth</text>
+  <text x="650" y="58" text-anchor="middle" font-size="13" fill="#6b7280">width_factor changes how many channels each layer has &#160;&#8226;&#160; blocks_per_stage changes how many residual blocks are chained per stage</text>
+
+  <!-- ================= ROW 1: WIDTH ================= -->
+  <text x="60" y="105" font-size="15" font-weight="700" fill="#1f2937">width_factor &#8594; more channels (filters) per layer, same image size</text>
+
+  <!-- width=1 -->
+  <g>
+    <rect x="90" y="130" width="60" height="60" fill="#93c5fd" stroke="#1e3a8a" stroke-width="2"/>
+    <text x="120" y="212" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">width_factor = 1</text>
+    <text x="120" y="228" text-anchor="middle" font-size="11" fill="#6b7280">stem = 64 channels</text>
+  </g>
+
+  <path d="M200 160 L250 160" stroke="#9ca3af" stroke-width="2" marker-end="url(#a4)"/>
+
+  <!-- width=2 -->
+  <g>
+    <rect x="270" y="140" width="60" height="60" fill="#93c5fd" stroke="#1e3a8a" stroke-width="2"/>
+    <rect x="280" y="130" width="60" height="60" fill="#60a5fa" stroke="#1e3a8a" stroke-width="2"/>
+    <text x="310" y="212" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">width_factor = 2</text>
+    <text x="310" y="228" text-anchor="middle" font-size="11" fill="#6b7280">stem = 128 channels</text>
+  </g>
+
+  <path d="M400 160 L450 160" stroke="#9ca3af" stroke-width="2" marker-end="url(#a4)"/>
+
+  <!-- width=4 -->
+  <g>
+    <rect x="470" y="150" width="60" height="60" fill="#93c5fd" stroke="#1e3a8a" stroke-width="2"/>
+    <rect x="478" y="142" width="60" height="60" fill="#60a5fa" stroke="#1e3a8a" stroke-width="2"/>
+    <rect x="486" y="134" width="60" height="60" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2"/>
+    <rect x="494" y="126" width="60" height="60" fill="#2563eb" stroke="#1e3a8a" stroke-width="2"/>
+    <text x="520" y="212" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">width_factor = 4</text>
+    <text x="520" y="228" text-anchor="middle" font-size="11" fill="#6b7280">stem = 256 channels</text>
+    <text x="520" y="244" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600">used in branch 05</text>
+  </g>
+
+  <rect x="600" y="118" width="650" height="130" fill="#ffffff" stroke="#e5e7eb" stroke-width="1.5" rx="10"/>
+  <text x="620" y="144" font-size="12" font-weight="700" fill="#1f2937">Why more channels helps</text>
+  <text x="620" y="166" font-size="12" fill="#374151">Each channel is one learned filter looking for one kind of pattern (an edge, a</text>
+  <text x="620" y="184" font-size="12" fill="#374151">texture, a color blob). More channels = more patterns the network can detect</text>
+  <text x="620" y="202" font-size="12" fill="#374151">at once, at the cost of more parameters and more compute per layer.</text>
+  <text x="620" y="228" font-size="12" fill="#374151">Base channel count = 64 &#215; width_factor, doubling again at every later stage.</text>
+
+  <!-- divider -->
+  <line x1="40" y1="290" x2="1260" y2="290" stroke="#e5e7eb" stroke-width="2"/>
+
+  <!-- ================= ROW 2: DEPTH ================= -->
+  <text x="60" y="330" font-size="15" font-weight="700" fill="#1f2937">blocks_per_stage &#8594; more residual blocks chained per stage, same channel width</text>
+
+  <!-- depth=2 -->
+  <g>
+    <rect x="90" y="360" width="55" height="55" rx="6" fill="#86efac" stroke="#14532d" stroke-width="2"/>
+    <text x="117" y="392" text-anchor="middle" font-size="10" font-weight="700" fill="#14532d">block 1</text>
+  </g>
+  <path d="M145 387 L165 387" stroke="#9ca3af" stroke-width="2" marker-end="url(#a4)"/>
+  <g>
+    <rect x="170" y="360" width="55" height="55" rx="6" fill="#86efac" stroke="#14532d" stroke-width="2"/>
+    <text x="197" y="392" text-anchor="middle" font-size="10" font-weight="700" fill="#14532d">block 2</text>
+  </g>
+  <text x="157" y="440" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">blocks_per_stage = 2</text>
+  <text x="157" y="456" text-anchor="middle" font-size="11" fill="#6b7280">standard ResNet18 depth (18 layers total)</text>
+
+  <path d="M240 387 L280 387" stroke="#9ca3af" stroke-width="2" marker-end="url(#a4)"/>
+  <text x="260" y="375" text-anchor="middle" font-size="14" fill="#9ca3af">+</text>
+
+  <!-- depth=4 -->
+  <g>
+    <rect x="290" y="360" width="48" height="55" rx="6" fill="#fca5a5" stroke="#7f1d1d" stroke-width="2"/>
+    <text x="314" y="392" text-anchor="middle" font-size="9" font-weight="700" fill="#7f1d1d">blk 1</text>
+  </g>
+  <path d="M338 387 L350 387" stroke="#9ca3af" stroke-width="2"/>
+  <g>
+    <rect x="355" y="360" width="48" height="55" rx="6" fill="#fca5a5" stroke="#7f1d1d" stroke-width="2"/>
+    <text x="379" y="392" text-anchor="middle" font-size="9" font-weight="700" fill="#7f1d1d">blk 2</text>
+  </g>
+  <path d="M403 387 L415 387" stroke="#9ca3af" stroke-width="2"/>
+  <g>
+    <rect x="420" y="360" width="48" height="55" rx="6" fill="#fca5a5" stroke="#7f1d1d" stroke-width="2"/>
+    <text x="444" y="392" text-anchor="middle" font-size="9" font-weight="700" fill="#7f1d1d">blk 3</text>
+  </g>
+  <path d="M468 387 L480 387" stroke="#9ca3af" stroke-width="2" marker-end="url(#a4)"/>
+  <g>
+    <rect x="485" y="360" width="48" height="55" rx="6" fill="#fca5a5" stroke="#7f1d1d" stroke-width="2"/>
+    <text x="509" y="392" text-anchor="middle" font-size="9" font-weight="700" fill="#7f1d1d">blk 4</text>
+  </g>
+  <text x="411" y="440" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">blocks_per_stage = 4</text>
+  <text x="411" y="456" text-anchor="middle" font-size="11" fill="#6b7280">used in branch 05 &#8594; "WideResNet-34-4" depth</text>
+
+  <rect x="600" y="345" width="650" height="130" fill="#ffffff" stroke="#e5e7eb" stroke-width="1.5" rx="10"/>
+  <text x="620" y="371" font-size="12" font-weight="700" fill="#1f2937">Why more blocks helps</text>
+  <text x="620" y="393" font-size="12" fill="#374151">Only the first block in a stage resizes the image; every extra block after</text>
+  <text x="620" y="411" font-size="12" fill="#374151">that keeps the same size and channel count, but gets another full round of</text>
+  <text x="620" y="429" font-size="12" fill="#374151">convolutions to refine the features &#8212; effectively a deeper network.</text>
+  <text x="620" y="455" font-size="12" fill="#374151">Total layers = 1 (stem) + 4 stages &#215; blocks_per_stage &#215; 2 convs + 1 (FC).</text>
+
+  <!-- formula footer -->
+  <rect x="30" y="500" width="1240" height="100" fill="#111827" rx="10"/>
+  <text x="650" y="533" text-anchor="middle" font-size="14" font-weight="700" fill="#f9fafb">FlexResNet(width_factor, blocks_per_stage, dropout)</text>
+  <text x="650" y="558" text-anchor="middle" font-size="12" fill="#d1d5db">width_factor = 1, blocks_per_stage = 2  &#8594;  plain ResNet18 (branch 03 / 04 / 06)</text>
+  <text x="650" y="578" text-anchor="middle" font-size="12" fill="#d1d5db">width_factor = 4, blocks_per_stage = 4  &#8594;  WideResNet-34-4, 34 weighted layers (branch 05)</text>
+
+  <defs>
+    <marker id="a4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#9ca3af"/>
+    </marker>
+  </defs>
+</svg>

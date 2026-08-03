@@ -1,0 +1,92 @@
+<svg viewBox="0 0 1400 520" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1400" height="520" fill="#fbfaf7"/>
+  <text x="700" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2937">ResNet18 — full architecture (branch 03 / 04)</text>
+  <text x="700" y="58" text-anchor="middle" font-size="13" fill="#6b7280">Stem + 4 stages of 2 residual blocks each = 18 weighted layers total. Spatial size halves, channel count doubles, at each new stage.</text>
+
+  <!-- Input -->
+  <g>
+    <rect x="20" y="200" width="60" height="60" fill="#93c5fd" stroke="#1e3a8a" stroke-width="2"/>
+    <text x="50" y="290" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2937">input</text>
+    <text x="50" y="304" text-anchor="middle" font-size="10" fill="#6b7280">3x32x32</text>
+  </g>
+  <path d="M80 230 L110 230" stroke="#9ca3af" stroke-width="2" marker-end="url(#a3)"/>
+
+  <!-- Stem -->
+  <g>
+    <rect x="120" y="195" width="70" height="70" fill="#d1d5db" stroke="#374151" stroke-width="2"/>
+    <text x="155" y="288" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2937">stem</text>
+    <text x="155" y="302" text-anchor="middle" font-size="10" fill="#6b7280">Conv+BN+ReLU</text>
+    <text x="155" y="316" text-anchor="middle" font-size="10" fill="#6b7280">64x32x32</text>
+  </g>
+  <path d="M190 230 L222 230" stroke="#9ca3af" stroke-width="2" marker-end="url(#a3)"/>
+
+  <!-- Stage 1 -->
+  <g>
+    <rect x="232" y="190" width="80" height="80" fill="#bbf7d0" stroke="#14532d" stroke-width="2"/>
+    <rect x="240" y="182" width="80" height="80" fill="#86efac" stroke="#14532d" stroke-width="2"/>
+    <text x="280" y="288" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2937">stage 1</text>
+    <text x="280" y="302" text-anchor="middle" font-size="10" fill="#14532d">2 blocks, stride 1</text>
+    <text x="280" y="316" text-anchor="middle" font-size="10" fill="#6b7280">64x32x32</text>
+  </g>
+  <path d="M320 222 L352 222" stroke="#9ca3af" stroke-width="2" marker-end="url(#a3)"/>
+
+  <!-- Stage 2 -->
+  <g>
+    <rect x="362" y="185" width="65" height="65" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="2"/>
+    <rect x="369" y="178" width="65" height="65" fill="#93c5fd" stroke="#1e3a8a" stroke-width="2"/>
+    <text x="401" y="288" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2937">stage 2</text>
+    <text x="401" y="302" text-anchor="middle" font-size="10" fill="#1e3a8a">2 blocks, stride 2</text>
+    <text x="401" y="316" text-anchor="middle" font-size="10" fill="#6b7280">128x16x16</text>
+  </g>
+  <path d="M434 210 L466 210" stroke="#9ca3af" stroke-width="2" marker-end="url(#a3)"/>
+
+  <!-- Stage 3 -->
+  <g>
+    <rect x="476" y="188" width="50" height="50" fill="#fde68a" stroke="#78350f" stroke-width="2"/>
+    <rect x="482" y="182" width="50" height="50" fill="#fcd34d" stroke="#78350f" stroke-width="2"/>
+    <text x="507" y="288" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2937">stage 3</text>
+    <text x="507" y="302" text-anchor="middle" font-size="10" fill="#78350f">2 blocks, stride 2</text>
+    <text x="507" y="316" text-anchor="middle" font-size="10" fill="#6b7280">256x8x8</text>
+  </g>
+  <path d="M532 207 L564 207" stroke="#9ca3af" stroke-width="2" marker-end="url(#a3)"/>
+
+  <!-- Stage 4 -->
+  <g>
+    <rect x="574" y="197" width="35" height="35" fill="#fecaca" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="579" y="192" width="35" height="35" fill="#fca5a5" stroke="#7f1d1d" stroke-width="2"/>
+    <text x="596" y="288" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2937">stage 4</text>
+    <text x="596" y="302" text-anchor="middle" font-size="10" fill="#7f1d1d">2 blocks, stride 2</text>
+    <text x="596" y="316" text-anchor="middle" font-size="10" fill="#6b7280">512x4x4</text>
+  </g>
+  <path d="M614 210 L646 210" stroke="#9ca3af" stroke-width="2" marker-end="url(#a3)"/>
+
+  <!-- avgpool -->
+  <g>
+    <circle cx="680" cy="212" r="24" fill="#e9d5ff" stroke="#581c87" stroke-width="2"/>
+    <text x="680" y="216" text-anchor="middle" font-size="9" font-weight="700" fill="#1f2937">avg</text>
+    <text x="680" y="252" text-anchor="middle" font-size="10" fill="#6b7280">global avg pool</text>
+    <text x="680" y="266" text-anchor="middle" font-size="10" fill="#6b7280">512x1x1</text>
+  </g>
+  <path d="M706 212 L738 212" stroke="#9ca3af" stroke-width="2" marker-end="url(#a3)"/>
+
+  <!-- FC -->
+  <g>
+    <rect x="748" y="185" width="26" height="55" rx="6" fill="#fde047" stroke="#713f12" stroke-width="2"/>
+    <text x="761" y="258" text-anchor="middle" font-size="10" font-weight="600" fill="#1f2937">FC</text>
+    <text x="761" y="272" text-anchor="middle" font-size="10" fill="#6b7280">10</text>
+  </g>
+
+  <rect x="30" y="340" width="1340" height="150" fill="#ffffff" stroke="#e5e7eb" stroke-width="1.5" rx="10"/>
+  <text x="50" y="368" font-weight="700" fill="#1f2937" font-size="14">What "2 blocks" means at each stage</text>
+  <text x="50" y="394" fill="#374151" font-size="12">Every stage box above is really two residual blocks back to back (see diagram 02 for what's inside one block). The FIRST block of a stage does the</text>
+  <text x="50" y="412" fill="#374151" font-size="12">work of resizing: stride 2 halves height and width while a 1x1-conv shortcut doubles the channel count to match. The SECOND block just</text>
+  <text x="50" y="430" fill="#374151" font-size="12">refines features at that new size with stride 1 and a plain identity shortcut. Stage 1 is the only stage that skips the resize (stride 1 throughout),</text>
+  <text x="50" y="448" fill="#374151" font-size="12">since the stem has already brought the input down to a reasonable working size before stage 1 even begins.</text>
+  <text x="50" y="470" fill="#374151" font-size="12" font-weight="600">Layer count: 1 stem conv + (4 stages x 2 blocks x 2 convs) + 1 final FC = 1 + 16 + 1 = 18 weighted layers &#8594; "ResNet-18".</text>
+
+  <defs>
+    <marker id="a3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#9ca3af"/>
+    </marker>
+  </defs>
+</svg>

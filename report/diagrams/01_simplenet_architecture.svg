@@ -1,0 +1,125 @@
+<svg viewBox="0 0 1300 480" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1300" height="480" fill="#fbfaf7"/>
+  <text x="650" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2937">SimpleNet — the baseline CNN (branch 00 / 01 / 02)</text>
+  <text x="650" y="58" text-anchor="middle" font-size="13" fill="#6b7280">CIFAR-10 input (32x32 RGB) &#8594; two conv+pool stages &#8594; three fully-connected layers &#8594; 10 class scores</text>
+
+  <!-- Input image -->
+  <g>
+    <rect x="30" y="150" width="90" height="90" fill="#93c5fd" stroke="#1e3a8a" stroke-width="2"/>
+    <text x="75" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">Input image</text>
+    <text x="75" y="286" text-anchor="middle" font-size="11" fill="#6b7280">3 x 32 x 32</text>
+  </g>
+
+  <path d="M130 195 L165 195" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Conv1 stack -->
+  <g>
+    <rect x="175" y="130" width="70" height="70" fill="#fca5a5" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="185" y="120" width="70" height="70" fill="#f87171" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="195" y="110" width="70" height="70" fill="#ef4444" stroke="#7f1d1d" stroke-width="2"/>
+    <text x="220" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">Conv1 (5x5) + ReLU</text>
+    <text x="220" y="286" text-anchor="middle" font-size="11" fill="#6b7280">6 x 28 x 28</text>
+  </g>
+
+  <path d="M275 175 L310 175" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Pool1 stack -->
+  <g>
+    <rect x="320" y="145" width="45" height="45" fill="#fdba74" stroke="#7c2d12" stroke-width="2"/>
+    <rect x="330" y="135" width="45" height="45" fill="#fb923c" stroke="#7c2d12" stroke-width="2"/>
+    <rect x="340" y="125" width="45" height="45" fill="#f97316" stroke="#7c2d12" stroke-width="2"/>
+    <text x="360" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">MaxPool 2x2</text>
+    <text x="360" y="286" text-anchor="middle" font-size="11" fill="#6b7280">6 x 14 x 14</text>
+  </g>
+
+  <path d="M400 165 L435 165" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Conv2 stack -->
+  <g>
+    <rect x="445" y="140" width="55" height="55" fill="#fca5a5" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="453" y="132" width="55" height="55" fill="#f87171" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="461" y="124" width="55" height="55" fill="#ef4444" stroke="#7f1d1d" stroke-width="2"/>
+    <rect x="469" y="116" width="55" height="55" fill="#dc2626" stroke="#7f1d1d" stroke-width="2"/>
+    <text x="490" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">Conv2 (5x5) + ReLU</text>
+    <text x="490" y="286" text-anchor="middle" font-size="11" fill="#6b7280">16 x 10 x 10</text>
+  </g>
+
+  <path d="M540 160 L575 160" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Pool2 stack -->
+  <g>
+    <rect x="585" y="150" width="30" height="30" fill="#fdba74" stroke="#7c2d12" stroke-width="2"/>
+    <rect x="592" y="143" width="30" height="30" fill="#fb923c" stroke="#7c2d12" stroke-width="2"/>
+    <rect x="599" y="136" width="30" height="30" fill="#f97316" stroke="#7c2d12" stroke-width="2"/>
+    <rect x="606" y="129" width="30" height="30" fill="#ea580c" stroke="#7c2d12" stroke-width="2"/>
+    <text x="615" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">MaxPool 2x2</text>
+    <text x="615" y="286" text-anchor="middle" font-size="11" fill="#6b7280">16 x 5 x 5</text>
+  </g>
+
+  <path d="M655 160 L690 160" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Flatten -->
+  <g>
+    <rect x="700" y="110" width="26" height="140" fill="#a5b4fc" stroke="#312e81" stroke-width="2"/>
+    <text x="713" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">Flatten</text>
+    <text x="713" y="286" text-anchor="middle" font-size="11" fill="#6b7280">400</text>
+  </g>
+
+  <path d="M736 180 L768 180" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- FC1 -->
+  <g>
+    <rect x="778" y="90" width="26" height="180" rx="6" fill="#86efac" stroke="#14532d" stroke-width="2"/>
+    <text x="791" y="290" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">FC1 + ReLU</text>
+    <text x="791" y="306" text-anchor="middle" font-size="11" fill="#6b7280">120</text>
+  </g>
+
+  <path d="M814 180 L846 180" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- FC2 -->
+  <g>
+    <rect x="856" y="110" width="26" height="140" rx="6" fill="#86efac" stroke="#14532d" stroke-width="2"/>
+    <text x="869" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">FC2 + ReLU</text>
+    <text x="869" y="286" text-anchor="middle" font-size="11" fill="#6b7280">84</text>
+  </g>
+
+  <path d="M892 180 L924 180" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- FC3 / output -->
+  <g>
+    <rect x="934" y="140" width="26" height="80" rx="6" fill="#fde047" stroke="#713f12" stroke-width="2"/>
+    <text x="947" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">FC3 (logits)</text>
+    <text x="947" y="286" text-anchor="middle" font-size="11" fill="#6b7280">10 classes</text>
+  </g>
+
+  <path d="M970 180 L1005 180" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Output labels -->
+  <g font-size="12" fill="#1f2937">
+    <rect x="1015" y="120" width="150" height="120" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5" rx="8"/>
+    <text x="1090" y="140" text-anchor="middle" font-weight="700">Class scores</text>
+    <text x="1090" y="160" text-anchor="middle" fill="#6b7280">airplane, car, bird,</text>
+    <text x="1090" y="176" text-anchor="middle" fill="#6b7280">cat, deer, dog, frog,</text>
+    <text x="1090" y="192" text-anchor="middle" fill="#6b7280">horse, ship, truck</text>
+    <text x="1090" y="216" text-anchor="middle" fill="#9ca3af">(argmax = prediction)</text>
+  </g>
+
+  <!-- Legend / key terms box -->
+  <g font-size="12">
+    <rect x="30" y="330" width="1240" height="130" fill="#ffffff" stroke="#e5e7eb" stroke-width="1.5" rx="10"/>
+    <text x="50" y="356" font-weight="700" fill="#1f2937" font-size="14">Reading this diagram</text>
+    <text x="50" y="380" fill="#374151">Each stacked block represents a set of feature maps (one map per output channel). Stacking 3&#8211;4</text>
+    <text x="50" y="398" fill="#374151">rectangles is a visual shorthand for "many channels" &#8212; the real counts are written under each block.</text>
+    <text x="50" y="416" fill="#374151">A 5x5 convolution slides a small learned filter over the image; pooling then shrinks the map by</text>
+    <text x="50" y="434" fill="#374151">keeping only the strongest value in each 2x2 window. After two rounds the map is flattened into a</text>
+    <text x="700" y="380" fill="#374151">single vector and passed through fully-connected (FC) layers, which combine every feature into</text>
+    <text x="700" y="398" fill="#374151">a final decision. This is the classic LeNet-style design: simple, fast, and a useful floor to beat.</text>
+    <text x="700" y="416" fill="#374151">Its ceiling on CIFAR-10 is roughly 60&#8211;65% test accuracy &#8212; see the Results section.</text>
+  </g>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#9ca3af"/>
+    </marker>
+  </defs>
+</svg>
