@@ -167,6 +167,15 @@ def train(model, dataloader_train, dataloader_val, criterion, optimizer, device,
 
         # step the scheduler once per epoch, not per batch, so lr changes smoothly epoch by epoch
         save_checkpoint(model, optimizer, epoch, best_val_acc, latest_path, history)
+
+        # push weights every 10 epochs so a disconnect never costs more than ~9 epochs of progress
+        if (epoch + 1) % 10 == 0:
+            import subprocess
+            subprocess.run(['git', 'add', latest_path], check=False)
+            subprocess.run(['git', 'commit', '-m', f'wip: checkpoint at epoch {epoch+1}'], check=False)
+            subprocess.run(['git', 'push'], check=False)
+            print(f"  Pushed checkpoint at epoch {epoch+1}")
+
         if scheduler is not None:
             scheduler.step()
             # updating learning rate in the progress bar for visibility
