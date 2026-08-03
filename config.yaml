@@ -1,5 +1,5 @@
 hyperparameters:
-  epochs: 100
+  epochs: 30
   # realtively small dataset and is expected to platao at around 70
   # making 300 epochs (used earlier to train yolo gaining 93% accuracy is over over kill)
 
