@@ -37,3 +37,7 @@ Train and evaluate a simple CNN on CIFAR-10 using PyTorch.
 - A portion of the training set is used for validation (see `val_split` in config).
 - After each epoch, validation loss and accuracy are printed.
 - Final test loss and accuracy are printed after training.
+
+## Architecture
+
+![architecture](docs/architecture.svg)
