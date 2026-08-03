@@ -1,0 +1,51 @@
+<svg viewBox="0 0 1168 220" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4a5568"/></marker></defs>
+<g>
+  <rect x="20" y="45" width="120" height="60" rx="8" fill="#4a5568" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="80.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">Input</text>
+  <text x="80.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">3x32x32</text>
+</g>
+<g>
+  <rect x="166" y="45" width="120" height="60" rx="8" fill="#2b6cb0" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="226.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">Stem</text>
+  <text x="226.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">Conv 3->64</text>
+</g>
+<line x1="140" y1="75" x2="166" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<g>
+  <rect x="312" y="45" width="120" height="60" rx="8" fill="#2c7a7b" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="372.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">Stage1</text>
+  <text x="372.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">1x Block 64</text>
+</g>
+<line x1="286" y1="75" x2="312" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<g>
+  <rect x="458" y="45" width="120" height="60" rx="8" fill="#2c7a7b" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="518.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">Stage2</text>
+  <text x="518.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">1x Block 128</text>
+</g>
+<line x1="432" y1="75" x2="458" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<g>
+  <rect x="604" y="45" width="120" height="60" rx="8" fill="#2c7a7b" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="664.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">Stage3</text>
+  <text x="664.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">1x Block 256</text>
+</g>
+<line x1="578" y1="75" x2="604" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<g>
+  <rect x="750" y="45" width="120" height="60" rx="8" fill="#2c7a7b" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="810.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">Stage4</text>
+  <text x="810.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">1x Block 512</text>
+</g>
+<line x1="724" y1="75" x2="750" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<g>
+  <rect x="896" y="45" width="120" height="60" rx="8" fill="#805ad5" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="956.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">AvgPool</text>
+  <text x="956.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">GlobalAvg</text>
+</g>
+<line x1="870" y1="75" x2="896" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<g>
+  <rect x="1042" y="45" width="120" height="60" rx="8" fill="#c05621" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="1102.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">FC</text>
+  <text x="1102.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">512->10</text>
+</g>
+<line x1="1016" y1="75" x2="1042" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<text x="20" y="140" fill="#2d3748" font-family="monospace" font-size="12">width_factor=1, blocks_per_stage=1, dropout used, name=w1d18-optimized</text>
+</svg>
