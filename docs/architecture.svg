@@ -1,0 +1,50 @@
+<svg viewBox="0 0 1040 150" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4a5568"/></marker></defs>
+<g>
+  <rect x="20" y="45" width="100" height="60" rx="8" fill="#4a5568" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="70.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">Input</text>
+  <text x="70.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">3x32x32</text>
+</g>
+<g>
+  <rect x="150" y="45" width="100" height="60" rx="8" fill="#2b6cb0" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="200.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">Conv1</text>
+  <text x="200.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">3->6, k5</text>
+</g>
+<line x1="120" y1="75" x2="150" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<g>
+  <rect x="280" y="45" width="100" height="60" rx="8" fill="#2c7a7b" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="330.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">Pool</text>
+  <text x="330.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">2x2</text>
+</g>
+<line x1="250" y1="75" x2="280" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<g>
+  <rect x="410" y="45" width="100" height="60" rx="8" fill="#2b6cb0" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="460.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">Conv2</text>
+  <text x="460.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">6->16, k5</text>
+</g>
+<line x1="380" y1="75" x2="410" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<g>
+  <rect x="540" y="45" width="100" height="60" rx="8" fill="#2c7a7b" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="590.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">Pool</text>
+  <text x="590.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">2x2</text>
+</g>
+<line x1="510" y1="75" x2="540" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<g>
+  <rect x="670" y="45" width="100" height="60" rx="8" fill="#c05621" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="720.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">FC1</text>
+  <text x="720.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">400->120</text>
+</g>
+<line x1="640" y1="75" x2="670" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<g>
+  <rect x="800" y="45" width="100" height="60" rx="8" fill="#c05621" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="850.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">FC2</text>
+  <text x="850.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">120->84</text>
+</g>
+<line x1="770" y1="75" x2="800" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+<g>
+  <rect x="930" y="45" width="100" height="60" rx="8" fill="#c05621" stroke="#1a365d" stroke-width="1.5"/>
+  <text x="980.0" y="69.0" text-anchor="middle" fill="white" font-family="monospace" font-size="13" font-weight="bold">FC3</text>
+  <text x="980.0" y="87.0" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">84->10</text>
+</g>
+<line x1="900" y1="75" x2="930" y2="75" stroke="#4a5568" stroke-width="2" marker-end="url(#arr)"/>
+</svg>
