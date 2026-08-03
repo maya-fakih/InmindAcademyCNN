@@ -11,8 +11,6 @@ import json
 
 import os
 
-from model import FlexResNet
-
 # Load config (YAML for easy editing)
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
@@ -253,15 +251,21 @@ def main():
     # Get data loaders for training and testing
     dataloader_train, dataloader_val, dataloader_test = get_loaders()
 
-    # This specific configuration (width_factor=4, blocks_per_stage=4) builds what's
-    # called a "WideResNet-34-4" in the literature's depth-width naming convention:
-    # 34 total weighted layers (1 stem + 4 stages x 4 blocks x 2 convs + 1 classifier),
-    # 4x wider channels than a standard ResNet at every stage. Similar family to the
-    # WideResNet paper's famous WRN-28-10, just a different depth/width tradeoff point.
-    # width_factor=4: quadruple channels at every stage (64->256 base instead of 64)
-    # blocks_per_stage=4: 4 residual blocks per stage instead of 2, so deeper too
-    # dropout=0.3: regularizes since we're deliberately adding a lot of capacity
-    model = FlexResNet(num_classes=10, width_factor=4, blocks_per_stage=4, dropout=0.3).to(device)
+    from model_pretrained import resnet56
+
+    model = resnet56().to(device)
+
+    # their checkpoint was saved from multi-GPU training, so keys are prefixed
+    # with "module." — need to strip that prefix before loading, or every key
+    # name mismatches and load_state_dict fails
+    checkpoint = torch.hub.load_state_dict_from_url(
+        'https://github.com/akamaster/pytorch_resnet_cifar10/raw/master/pretrained_models/resnet56-4bfd9763.th',
+        map_location=device
+    )
+    state_dict = checkpoint['state_dict']
+    state_dict = {k.replace('module.', ''): v for k, v in state_dict.items()}
+    model.load_state_dict(state_dict)
+    print("Loaded pretrained resnet56 weights (93.39% baseline test accuracy)")
 
     # Define the loss function (cross-entropy for classification)
     # cross entropy is a measure of how well the predicted probability distro matches the true distro
